@@ -114,6 +114,7 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
             }
             val x_gap = r / 5
             val r_gap = x_gap
+            paint.color = Color.parseColor("#212121")
             for (i in 0..3) {
                 canvas.save()
                 val x1 : Float = r_gap * Math.cos(Math.PI/6).toFloat()
@@ -133,4 +134,22 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
         }
     }
 
+    data class Renderer(private val view : PieTriCircleView) {
+        private val animator : Animator = Animator(view)
+        private val pieTriCircle : PieTriCircle = PieTriCircle(0)
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            pieTriCircle.draw(canvas, paint)
+            animator.animate {
+                pieTriCircle.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            pieTriCircle.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
