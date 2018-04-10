@@ -90,7 +90,7 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
             canvas.save()
             canvas.translate(w/2, h/2)
             paint.color = Color.WHITE
-            paint.strokeWidth = Math.min(w,h) / 50
+            paint.strokeWidth = Math.min(w,h) / 60
             paint.strokeCap = Paint.Cap.ROUND
             paint.style = Paint.Style.STROKE
             val r : Float = Math.min(w,h)/10
@@ -109,21 +109,22 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
             paint.style = Paint.Style.FILL
             canvas.drawCircle(0f, 0f, r * this.state.scales[1], paint)
             paint.style = Paint.Style.STROKE
+            paint.color = Color.parseColor("#212121")
             for (i in 0..1) {
                 canvas.save()
-                canvas.rotate(30f * (1 - 2 * i) * state.scales[2])
-                canvas.drawLine(0f, 0f, 0f, r * state.scales[3], paint)
+                canvas.rotate(30f * (1 - 2 * i) * state.scales[3])
+                canvas.drawLine(0f, 0f, 0f, r * state.scales[2], paint)
                 canvas.restore()
             }
-            val x_gap = r / 5
-            val r_gap = x_gap
-            paint.color = Color.parseColor("#212121")
+            val x_gap = r / 4
+            var r_gap = x_gap
             for (i in 0..3) {
                 canvas.save()
                 val x1 : Float = r_gap * Math.cos(Math.PI/6).toFloat()
                 val y1 : Float = r_gap * Math.sin(Math.PI/6).toFloat()
-                canvas.drawLine(x1 * this.state.scales[4], y1, -x1 * this.state.scales[4], y1, paint)
+                canvas.drawLine(x1 * this.state.scales[4], y1, -x1 * this.state.scales[4] , y1, paint)
                 canvas.restore()
+                r_gap += x_gap
             }
             canvas.restore()
         }
