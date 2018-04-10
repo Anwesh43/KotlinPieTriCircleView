@@ -4,6 +4,7 @@ package ui.anwesome.com.pietricircleview
  * Created by anweshmishra on 10/04/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.content.Context
@@ -152,6 +153,14 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
             pieTriCircle.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : PieTriCircleView {
+            val view : PieTriCircleView = PieTriCircleView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
