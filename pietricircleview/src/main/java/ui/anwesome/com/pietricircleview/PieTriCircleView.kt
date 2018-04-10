@@ -120,9 +120,9 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
             var r_gap = x_gap
             for (i in 0..3) {
                 canvas.save()
-                val x1 : Float = r_gap * Math.cos(Math.PI/6).toFloat()
-                val y1 : Float = r_gap * Math.sin(Math.PI/6).toFloat()
-                canvas.drawLine(x1 * this.state.scales[4], y1, -x1 * this.state.scales[4] , y1, paint)
+                val x1 : Float = r_gap * Math.sin(Math.PI/6).toFloat()
+                val y1 : Float = r_gap * Math.cos(Math.PI/6).toFloat()
+                canvas.drawLine(-x1, y1, -x1 + 2 * x1 * this.state.scales[4] , y1, paint)
                 canvas.restore()
                 r_gap += x_gap
             }
