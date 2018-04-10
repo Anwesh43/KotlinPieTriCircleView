@@ -28,7 +28,7 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
 
     data class State (var prevScale : Float = 0f, var dir : Float = 0f, var j : Int = 0) {
 
-        private val scales : Array<Float> = arrayOf(0f, 0f, 0f, 0f, 0f)
+        val scales : Array<Float> = arrayOf(0f, 0f, 0f, 0f, 0f)
 
         fun update(stopcb : (Float) -> Unit) {
             scales[j] += 0.1f * dir
@@ -77,6 +77,59 @@ class PieTriCircleView (ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class PieTriCircle (var i : Int, val state : State = State()) {
+        fun draw(canvas : Canvas, paint : Paint) {
+            val w : Float = canvas.width.toFloat()
+            val h : Float = canvas.height.toFloat()
+            canvas.save()
+            canvas.translate(w/2, h/2)
+            paint.color = Color.WHITE
+            paint.strokeWidth = Math.min(w,h) / 50
+            paint.strokeCap = Paint.Cap.ROUND
+            paint.style = Paint.Style.STROKE
+            val r : Float = Math.min(w,h)/10
+            val path : Path = Path()
+            for (i in 0..(360 * state.scales[0]).toInt()) {
+                val x : Float = r * Math.cos(i * Math.PI/180).toFloat()
+                val y : Float = r * Math.sin(i * Math.PI/180).toFloat()
+                if (i == 0) {
+                    path.moveTo(x, y)
+                }
+                else {
+                    path.lineTo(x, y)
+                }
+            }
+            canvas.drawPath(path, paint)
+            paint.style = Paint.Style.FILL
+            canvas.drawCircle(0f, 0f, r * this.state.scales[1], paint)
+            paint.style = Paint.Style.STROKE
+            for (i in 0..1) {
+                canvas.save()
+                canvas.rotate(30f * (1 - 2 * i) * state.scales[2])
+                canvas.drawLine(0f, 0f, 0f, r * state.scales[3], paint)
+                canvas.restore()
+            }
+            val x_gap = r / 5
+            val r_gap = x_gap
+            for (i in 0..3) {
+                canvas.save()
+                val x1 : Float = r_gap * Math.cos(Math.PI/6).toFloat()
+                val y1 : Float = r_gap * Math.sin(Math.PI/6).toFloat()
+                canvas.drawLine(x1 * this.state.scales[4], y1, -x1 * this.state.scales[4], y1, paint)
+                canvas.restore()
+            }
+            canvas.restore()
+        }
+
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
         }
     }
 
